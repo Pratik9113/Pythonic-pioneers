@@ -361,6 +361,56 @@ class Student:
         )
         Right_frame.place(x=780, y=10, width=660, height=580)
 
+        img_path = r"C:\Users\91799\Desktop\Pythonic-pioneers\Images\background.png"
+        img_right = Image.open(img_path)
+        img_right = img_right.resize(
+            (1530, 710), resample=Image.LANCZOS
+        )  # Use LANCZOS for antialiasing
+        self.photoimg_right = ImageTk.PhotoImage(img_right)
+
+        bg_img_right = Label(Right_frame, image=self.photoimg_right)
+        bg_img_right.place(x=5, y=0, width=720, height=130)
+
+        #   search system
+
+        search_frame = LabelFrame(
+            Right_frame,
+            bd=2,
+            bg="white",
+            relief=RIDGE,
+            text="Search system ",
+            font=("times new roman", 12, "bold"),
+        )
+        search_frame.place(x=5, y=135, width=710, height=70)
+
+        search_label = Label(
+            search_frame,
+            text="Search By:",
+            font=("times new roman", 15, "bold"),
+            bg="red",
+        )
+        search_label.grid(row=0, column=0, padx=10, pady=5, sticky=W)
+
+        search_combo = ttk.Combobox(
+            search_frame,
+            font=("times new roman", 12, "bold"),
+            width=17,
+            state="readonly",
+        )
+        search_combo["values"] = (
+            "Select ",
+            "RollNo",
+            "IV",
+            "III",
+            "IV",
+            "V",
+            "VI",
+            "VII",
+            "VIII",
+        )
+        search_combo.current(0)
+        search_combo.grid(row=0, column=1, padx=2, pady=10, sticky=W)
+
 
 if __name__ == "__main__":
     root = Tk()
