@@ -9,6 +9,7 @@ import mysql.connector as con
 import bcrypt
 
 
+# import student
 class LoginApp(QDialog):
     def __init__(self):
         super(LoginApp, self).__init__()
