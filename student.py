@@ -359,7 +359,7 @@ class Student:
             text="Students Details",
             font=("times new roman", 12, "bold"),
         )
-        Right_frame.place(x=780, y=10, width=660, height=580)
+        Right_frame.place(x=780, y=10, width=760, height=580)
 
         img_path = r"C:\Users\91799\Desktop\Pythonic-pioneers\Images\background.png"
         img_right = Image.open(img_path)
@@ -410,6 +410,71 @@ class Student:
         )
         search_combo.current(0)
         search_combo.grid(row=0, column=1, padx=2, pady=10, sticky=W)
+
+        search_entry = ttk.Entry(
+            search_frame, width=15, font=("times new roman", 12, "bold")
+        )
+        search_entry.grid(row=0, column=2, padx=10, sticky=W)
+        # button
+        search_btn = Button(
+            search_frame,
+            text="Search",
+            font=("times new roman", 12, "bold"),
+            bg="blue",
+            fg="white",
+            width="10",
+        )
+        search_btn.grid(row=0, column=3)
+
+        showall_btn = Button(
+            search_frame,
+            text="Show All",
+            font=("times new roman", 12, "bold"),
+            bg="blue",
+            fg="white",
+            width="10",
+        )
+        showall_btn.grid(row=0, column=4)
+
+        # table
+        table_frame = Frame(
+            Right_frame,
+            bd=2,
+            bg="white",
+            relief=RIDGE,
+            # font=("times new roman", 12, "bold"),
+        )
+        table_frame.place(x=5, y=210, width=710, height=350)
+
+        scroll_x = ttk.Scrollbar(table_frame, orient=HORIZONTAL)
+        scroll_y = ttk.Scrollbar(table_frame, orient=VERTICAL)
+
+        self.student_table = ttk.Treeview(
+            table_frame,
+            column=("dep", "course", "year", "rollno", "gender"),
+            xscrollcommand=scroll_x.set,
+            yscrollcommand=scroll_y.set,
+        )
+        scroll_x.pack(side=BOTTOM, fill=X)
+        scroll_y.pack(side=RIGHT, fill=Y)
+
+        scroll_x.config(command=self.student_table.xview)
+        scroll_y.config(command=self.student_table.yview)
+
+        self.student_table.heading("dep", text="Department")
+        self.student_table.heading("course", text="Course")
+        self.student_table.heading("year", text="Year")
+        self.student_table.heading("rollno", text="Roll NO")
+        self.student_table.heading("gender", text="Gender")
+        self.student_table["show"] = "headings"
+
+        self.student_table.column("dep", width=100)
+        self.student_table.column("course", width=100)
+        self.student_table.column("year", width=100)
+        self.student_table.column("rollno", width=100)
+        self.student_table.column("gender", width=100)
+
+        self.student_table.pack(fill=BOTH, expand=1)
 
 
 if __name__ == "__main__":
