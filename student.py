@@ -5,6 +5,8 @@ from tkinter import messagebox
 import mysql.connector
 import cv2
 
+from teachercheck import AdminView
+
 
 class Student:
     def __init__(self, root):
@@ -147,10 +149,10 @@ class Student:
         )
         year_combo["values"] = (
             "Select year",
-            "2020-2024",
-            "2021-2025",
-            "2022-2026",
-            "2023-2027",
+            "2020",
+            "2021",
+            "2022",
+            "2023",
         )
         year_combo.current(0)
         year_combo.grid(row=1, column=1, padx=2, pady=10, sticky=W)
@@ -237,7 +239,7 @@ class Student:
             text="Division:",
             font=("times new roman", 12, "bold"),
             bg="white",
-            textvariable=self.var_Studentdiv,
+            # textvariable=self.var_Studentdiv,
         )
         student_div_label.grid(row=1, column=0, padx=10, pady=5, sticky=W)
 
@@ -258,14 +260,28 @@ class Student:
         )
         student_gender_label.grid(row=1, column=2, padx=10, pady=5, sticky=W)
 
-        student_gender_entry = ttk.Entry(
-            class_student_frame,
-            textvariable=self.var_Studentgender,
-            width=20,
-            font=("times new roman", 13, "bold"),
-        )
-        student_gender_entry.grid(row=1, column=3, padx=10, sticky=W)
+        # student_gender_entry = ttk.Entry(
+        #     class_student_frame,
+        #     textvariable=self.var_Studentgender,
+        #     width=20,
+        #     font=("times new roman", 13, "bold"),
+        # )
+        # student_gender_entry.grid(row=1, column=3, padx=10, sticky=W)
 
+        gender_combo = ttk.Combobox(
+            class_student_frame,
+            font=("times new roman", 12, "bold"),
+            width=17,
+            state="readonly",
+            textvariable=self.var_Studentgender,
+        )
+        gender_combo["values"] = (
+            "Male",
+            "Female",
+            "Others",
+        )
+        gender_combo.current(0)
+        gender_combo.grid(row=1, column=3, padx=2, pady=10, sticky=W)
         # dob ************************
         student_dob_label = Label(
             class_student_frame,
@@ -303,7 +319,7 @@ class Student:
         # radio button ************************
         radiobtn1 = ttk.Radiobutton(
             class_student_frame,
-            textvariable=self.var_radio1,
+            variable=self.var_radio1,
             text="Take a Photo Sample",
             value="Yes",
         )
@@ -311,7 +327,7 @@ class Student:
 
         radiobtn2 = ttk.Radiobutton(
             class_student_frame,
-            textvariable=self.var_radio2,
+            variable=self.var_radio2,
             text="Do not  a Photo Sample",
             value="No",
         )
@@ -328,7 +344,7 @@ class Student:
 
         save_btn = Button(
             btn_frame,
-            command = self.add_data,
+            command=self.add_data,
             text="Save",
             font=("times new roman", 13, "bold"),
             bg="blue",
@@ -339,6 +355,7 @@ class Student:
 
         update_btn = Button(
             btn_frame,
+            command=self.update_data,
             text="Update",
             font=("times new roman", 13, "bold"),
             bg="blue",
@@ -377,6 +394,7 @@ class Student:
 
         take_photo_btn = Button(
             btn_frame1,
+            command=self.generate_dataset,
             text="take photo sample",
             font=("times new roman", 13, "bold"),
             bg="blue",
@@ -401,16 +419,297 @@ class Student:
             or self.var_StudentName.get() == ""
             or self.var_StudentId.get() == ""
         ):
-            messagebox.showerror("Error", "All field are mandatory", parent = self.root)
+            messagebox.showerror("Error", "All field are mandatory", parent=self.root)
         else:
-            conn = mysql.connector.connect(host="localhost", username = "root", password = "Ayushi@8383", database = "face_recognition")
-            my_cursor = conn.cursor()
-            my_cursor.execute("insert into (tablename) values(%s col name uthane likhna hai) ", ())
+            try:
+                conn = mysql.connector.connect(
+                    host="localhost",
+                    username="root",
+                    password="Pratik@6878",
+                    database="face_recognition",
+                )
+                my_cursor = conn.cursor()
+                my_cursor.execute(
+                    "insert into studentdetails values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    (
+                        self.var_StudentId.get(),
+                        self.var_dep.get(),
+                        self.var_course.get(),
+                        self.var_year.get(),
+                        self.var_semester.get(),
+                        self.var_StudentName.get(),
+                        self.var_Studentdiv.get(),
+                        self.var_Studentgender.get(),
+                        self.var_DOB.get(),
+                        self.var_email.get(),
+                    ),
+                )
+                conn.commit()
+                # self.fetch_data()
+                conn.close()
+                messagebox.showinfo(
+                    "success", "student details has been added ", parent=self.root
+                )
+            except Exception as es:
+                messagebox.showerror("error", f"due to : {str(es)}", parent=self.root)
+
+    # fetch data
+    def fetch_data(self):
+        conn = mysql.connector.connect(
+            host="localhost",
+            username="root",
+            password="Pratik@6878",
+            database="face_recognition",
+        )
+        my_cursor = conn.cursor()
+        my_cursor.execute("select * from studentdetails")
+        data = my_cursor.fetchall()
+
+        if len(data) != 0:
+            self.AdminView.student_table.delete(
+                self.AdminView.student_table.get_children()
+            )
+            for i in data:
+                self.AdminView.student_table.insert("", END, values=i)
+            conn.commit()
+        conn.close
+
+    ####################get cursor
+    # def get_cursor(self):
+    #     cursor_focus  = self.AdminView.student_table.focus()
+    #     content =
+    ################################################################
+    # generate dataset and take a sample
+
+    ############### update data
+    def update_data(self):
+        if (
+            self.var_dep.get() == "Select Department"
+            or self.var_StudentName.get() == ""
+            or self.var_StudentId.get() == ""
+        ):
+            messagebox.showerror("Error", "All field are mandatory", parent=self.root)
+        else:
+            try:
+                Update = messagebox.askyesno(
+                    "Update",
+                    "Do you want to update the student details",
+                    parent=self.root,
+                )
+                if Update > 0:
+                    conn = mysql.connector.connect(
+                        host="localhost",
+                        username="root",
+                        password="Pratik@6878",
+                        database="face_recognition",
+                    )
+                    my_cursor = conn.cursor()
+                    my_cursor.execute(
+                        "update studentdetails set dep =%s,course=%s,year=%s,semester =%s,studentname =%s,studentdiv=%s,studentgender=%s,dob=%s,email=%s where studentid = %s",
+                        (
+                            self.var_dep.get(),
+                            self.var_course.get(),
+                            self.var_year.get(),
+                            self.var_semester.get(),
+                            self.var_StudentName.get(),
+                            self.var_Studentdiv.get(),
+                            self.var_Studentgender.get(),
+                            self.var_DOB.get(),
+                            self.var_email.get(),
+                            self.var_StudentId.get(),
+                        ),
+                    )
+                else:
+                    if not Update:
+                        return
+                messagebox.showinfo(
+                    "success", "Student details successfully updated", parent=self.root
+                )
+                conn.commit()
+                # self.fetch_data()
+                conn.close()
+
+            except Exception as es:
+                messagebox.showerror("error", f"due to : {str(es)}", parent=self.root)
+
+    ## generate data set an take photo sample
+    # def generate_dataset(self):
+    #     if (
+    #         self.var_dep.get() == "Select Department"
+    #         or self.var_StudentName.get() == ""
+    #         or self.var_StudentId.get() == ""
+    #     ):
+    #         messagebox.showerror("Error", "All field are mandatory", parent=self.root)
+    #     else:
+    #         try:
+    #             conn = mysql.connector.connect(
+    #                 host="localhost",
+    #                 username="root",
+    #                 password="Pratik@6878",
+    #                 database="face_recognition",
+    #             )
+    #             my_cursor = conn.cursor()
+    #             my_cursor.execute("select* from student")
+    #             myresult = my_cursor.fetchall()
+    #             id = 0
+    #             for x in myresult:
+    #                 id += 1
+    #             my_cursor.execute(
+    #                 "update studentdetails set dep =%s,course=%s,year=%s,semester =%s,studentname =%s,studentdiv=%s,studentgender=%s,dob=%s,email=%s where studentid = %s",
+    #                 (
+    #                     self.var_dep.get(),
+    #                     self.var_course.get(),
+    #                     self.var_year.get(),
+    #                     self.var_semester.get(),
+    #                     self.var_StudentName.get(),
+    #                     self.var_Studentdiv.get(),
+    #                     self.var_Studentgender.get(),
+    #                     self.var_DOB.get(),
+    #                     self.var_email.get(),
+    #                     self.var_StudentId.get(),
+    #                 ),
+    #             )
+    #             conn.commit()
+    #             # self.fetch_data()
+    #             conn.close()
+
+    #             # load predeifind data on front page
+    #             face_classifier = cv2.CascadeClassifier(
+    #                 "haarcascade_frontalface_default.xml"
+    #             )
+
+    #             def face_cropped(img):
+    #                 # color into grey scale
+    #                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #                 faces = face_classifier.detectMultiScale(gray, 1.3, 5)
+    #                 # 1.3 scalling factor
+    #                 # 5 minimum neighbour = 5
+
+    #                 for x, y, w, h in faces:
+    #                     face_cropped = img[y : y + h, x : x + w]
+    #                     return face_cropped
+
+    #             cap = cv2.VideoCapture(0)
+    #             img_id = 0
+    #             while True:
+    #                 ret, my_frame = cap.read()
+    #                 if face_cropped(my_frame) is not None:
+    #                     img_id += 1
+    #                 face = cv2.resize(face_cropped(my_frame), (450, 450))
+    #                 face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+    #                 file_name_path = (
+    #                     "data/user." + str(img_id) + "." + str(img_id) + ".jpg"
+    #                 )
+    #                 cv2.imwrite(file_name_path, face)
+    #                 cv2.putText(
+    #                     face,
+    #                     str(img_id),
+    #                     (50, 50),
+    #                     cv2.FONT_HERSHEY_COMPLEX,
+    #                     2,
+    #                     (0, 255, 0),
+    #                     2,
+    #                 )
+    #                 cv2.imshow("Croped Face", face)
+
+    #                 if cv2.waitKey(1) == 13 or int(img_id) == 100:
+    #                     break
+
+    #             cap.release()
+    #             cv2.destroyAllWindows()
+    #             messagebox.showinfo("Result", "Generating data sets completed !!!")
+
+    #         except Exception as es:
+    #             messagebox.showerror("error", f"due to : {str(es)}", parent=self.root)
+    def generate_dataset(self):
+        if (
+            self.var_dep.get() == "Select Department"
+            or self.var_StudentName.get() == ""
+            or self.var_StudentId.get() == ""
+        ):
+            messagebox.showerror("Error", "All fields are mandatory", parent=self.root)
+        else:
+            try:
+                conn = mysql.connector.connect(
+                    host="localhost",
+                    username="root",
+                    password="Pratik@6878",
+                    database="face_recognition",
+                )
+                my_cursor = conn.cursor()
+                my_cursor.execute("select * from student")
+                myresult = my_cursor.fetchall()
+                id = 0
+                for x in myresult:
+                    id += 1
+                my_cursor.execute(
+                    "update studentdetails set dep =%s,course=%s,year=%s,semester =%s,studentname =%s,studentdiv=%s,studentgender=%s,dob=%s,email=%s where studentid = %s",
+                    (
+                        self.var_dep.get(),
+                        self.var_course.get(),
+                        self.var_year.get(),
+                        self.var_semester.get(),
+                        self.var_StudentName.get(),
+                        self.var_Studentdiv.get(),
+                        self.var_Studentgender.get(),
+                        self.var_DOB.get(),
+                        self.var_email.get(),
+                        self.var_StudentId.get(),
+                    ),
+                )
+                conn.commit()
+                conn.close()
+
+                # load predefined data on the front page
+                face_classifier = cv2.CascadeClassifier(
+                    "haarcascade_frontalface_default.xml"
+                )
+
+                def face_cropped(img):
+                    # Convert to grayscale
+                    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                    faces = face_classifier.detectMultiScale(gray, 1.3, 5)
+
+                    for x, y, w, h in faces:
+                        face_cropped = img[y : y + h, x : x + w]
+                        return face_cropped
+
+                cap = cv2.VideoCapture(0)
+                img_id = 0
+                while True:
+                    ret, my_frame = cap.read()
+                    cropped_face = face_cropped(my_frame)
+                    if cropped_face is not None:
+                        img_id += 1
+                        face = cv2.resize(cropped_face, (450, 450))
+                        face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+                        file_name_path = (
+                            "data/user." + str(id) + "." + str(img_id) + ".jpg"
+                        )
+                        cv2.imwrite(file_name_path, face)
+                        cv2.putText(
+                            face,
+                            str(img_id),
+                            (50, 50),
+                            cv2.FONT_HERSHEY_COMPLEX,
+                            2,
+                            (0, 255, 0),
+                            2,
+                        )
+                        cv2.imshow("Cropped Face", face)
+
+                    if cv2.waitKey(1) == 13 or int(img_id) == 100:
+                        break
+
+                cap.release()
+                cv2.destroyAllWindows()
+                messagebox.showinfo("Result", "Generating data sets completed !!!")
+
+            except Exception as es:
+                messagebox.showerror("Error", f"Due to: {str(es)}", parent=self.root)
+
 
 if __name__ == "__main__":
     root = Tk()
     obj = Student(root)
     root.mainloop()
-
-
-# -----------------generate data set take photo sample -------------------
