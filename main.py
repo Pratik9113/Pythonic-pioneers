@@ -18,7 +18,7 @@ class Face_Recognition_System:
         # f_lbl.place(width ,height)
 
         # background page
-        imgbg1 = Image.open(r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png")
+        imgbg1 = Image.open(r"C:\Users\91799\Desktop\Pythonic-pioneers\bg.png")
         imgbg1 = imgbg1.resize(
             (1080, 720), Image.BILINEAR
         )  # Change to your desired filter
@@ -32,7 +32,7 @@ class Face_Recognition_System:
         # option
         # Button 1
         # student details
-        img4 = Image.open(r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png")
+        img4 = Image.open(r"C:\Users\91799\Desktop\Pythonic-pioneers\bg.png")
         img4 = img4.resize((200, 120), Image.BILINEAR)
         self.photoimg4 = ImageTk.PhotoImage(img4)
         b1 = Button(
@@ -45,21 +45,21 @@ class Face_Recognition_System:
         )
         b1_1.place(x=10, y=90, width=200, height=40)
         # Button 2
-        img5 = Image.open(r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png")
+        img5 = Image.open(r"C:\Users\91799\Desktop\Pythonic-pioneers\bg.png")
         img5 = img5.resize((200, 120), Image.BILINEAR)
         self.photoimg5 = ImageTk.PhotoImage(img5)
         b2 = Button(bg_img, image=self.photoimg5, cursor="hand2")
         b2.place(width=200, height=120, x=220, y=20)
 
         # Button 3
-        img6 = Image.open(r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png")
+        img6 = Image.open(r"C:\Users\91799\Desktop\Pythonic-pioneers\bg.png")
         img6 = img6.resize((200, 120), Image.BILINEAR)
         self.photoimg6 = ImageTk.PhotoImage(img6)
         b3 = Button(bg_img, image=self.photoimg6, cursor="hand2")
         b3.place(width=200, height=120, x=430, y=20)
 
         # Button 4
-        img7 = Image.open(r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png")
+        img7 = Image.open(r"C:\Users\91799\Desktop\Pythonic-pioneers\bg.png")
         img7 = img7.resize((200, 120), Image.BILINEAR)
         self.photoimg7 = ImageTk.PhotoImage(img7)
         b4 = Button(bg_img, image=self.photoimg7, cursor="hand2")
