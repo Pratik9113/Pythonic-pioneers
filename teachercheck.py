@@ -2,27 +2,29 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
 
+import mysql.connector
 
-class Student:
+
+class AdminView:
     def __init__(self, root):
         self.root = root
-        self.root.geometry("1530x790+0+0")
+        self.root.geometry("1020x720+0+0")
         self.root.title("student")
 
         # Background image
         img_path = r"C:\Users\91799\Desktop\Pythonic-pioneers\Images\background.png"
         img3 = Image.open(img_path)
         img3 = img3.resize(
-            (1530, 710), resample=Image.LANCZOS
+            (1080, 710), resample=Image.LANCZOS
         )  # Use LANCZOS for antialiasing
         self.photoimg3 = ImageTk.PhotoImage(img3)
 
         bg_img = Label(self.root, image=self.photoimg3)
-        bg_img.place(x=0, y=130, width=1530, height=710)
+        bg_img.place(x=0, y=0, width=1080, height=720)
 
         # Frames
         main_frame = Frame(bg_img, bd=2)
-        main_frame.place(x=5, y=55, width=1500, height=600)
+        main_frame.place(x=0, y=0, width=1080, height=720)
 
         Right_frame = LabelFrame(
             main_frame,
@@ -32,7 +34,7 @@ class Student:
             text="Students Details",
             font=("times new roman", 12, "bold"),
         )
-        Right_frame.place(x=780, y=10, width=760, height=580)
+        Right_frame.place(x=0, y=0, width=1000, height=700)
 
         img_path = r"C:\Users\91799\Desktop\Pythonic-pioneers\Images\background.png"
         img_right = Image.open(img_path)
@@ -42,7 +44,7 @@ class Student:
         self.photoimg_right = ImageTk.PhotoImage(img_right)
 
         bg_img_right = Label(Right_frame, image=self.photoimg_right)
-        bg_img_right.place(x=5, y=0, width=720, height=130)
+        bg_img_right.place(x=5, y=5, width=980, height=130)
 
         #   search system
 
@@ -54,7 +56,7 @@ class Student:
             text="Search system ",
             font=("times new roman", 12, "bold"),
         )
-        search_frame.place(x=5, y=135, width=710, height=70)
+        search_frame.place(x=5, y=135, width=950, height=70)
 
         search_label = Label(
             search_frame,
@@ -148,9 +150,36 @@ class Student:
         self.student_table.column("gender", width=100)
 
         self.student_table.pack(fill=BOTH, expand=1)
+        self.fetch_data()
+        # get cursor no use self.student_table.bind("<ButtonRelease>", self.get_cursor)
+
+    def fetch_data(self):
+        conn = mysql.connector.connect(
+            host="localhost",
+            username="root",
+            password="Pratik@6878",
+            database="face_recognition",
+        )
+        my_cursor = conn.cursor()
+        my_cursor.execute("select* from studentdetails")
+        data = my_cursor.fetchall()
+
+        if len(data) != 0:
+            self.student_table.delete(*self.student_table.get_children())
+            for i in data:
+                self.student_table.insert("", END, values=i)
+            conn.commit()
+        conn.close()
+
+    ###########3 get cursor
+    # def get_cursor(self, event=""):
+    #     cursor_focus = self.student_table.focus()
+    #     content = self.student_table, item(cursor_focus)
+    #     data = content["values"]
+    #     self.var_
 
 
 if __name__ == "__main__":
     root = Tk()
-    obj = Student(root)
+    obj = AdminView(root)
     root.mainloop()
