@@ -1,28 +1,45 @@
 from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
+from tkinter import messagebox
+import mysql.connector
+import cv2
 
 
 class Student:
     def __init__(self, root):
         self.root = root
-        self.root.geometry("1530x790+0+0")
+        self.root.geometry("1080x720+0+0")
         self.root.title("student")
+
+        # ------variable -------
+        self.var_dep = StringVar()
+        self.var_course = StringVar()
+        self.var_year = StringVar()
+        self.var_semester = StringVar()
+        self.var_StudentId = StringVar()
+        self.var_StudentName = StringVar()
+        self.var_Studentdiv = StringVar()
+        self.var_Studentgender = StringVar()
+        self.var_DOB = StringVar()
+        self.var_email = StringVar()
+        self.var_radio1 = StringVar()
+        self.var_radio2 = StringVar()
 
         # Background image
         img_path = r"C:\Users\91799\Desktop\Pythonic-pioneers\Images\background.png"
         img3 = Image.open(img_path)
         img3 = img3.resize(
-            (1530, 710), resample=Image.LANCZOS
+            (1080, 720), resample=Image.LANCZOS
         )  # Use LANCZOS for antialiasing
         self.photoimg3 = ImageTk.PhotoImage(img3)
 
         bg_img = Label(self.root, image=self.photoimg3)
-        bg_img.place(x=0, y=130, width=1530, height=710)
+        bg_img.place(x=0, y=0, width=1080, height=720)
 
         # Frames
         main_frame = Frame(bg_img, bd=2)
-        main_frame.place(x=5, y=55, width=1500, height=600)
+        main_frame.place(x=40, y=0, width=1000, height=700)
 
         # left side frame
 
@@ -70,6 +87,7 @@ class Student:
             font=("times new roman", 12, "bold"),
             width=17,
             state="readonly",
+            textvariable=self.var_dep,
         )
         dep_combo["values"] = (
             "Select Department",
@@ -97,6 +115,7 @@ class Student:
             font=("times new roman", 12, "bold"),
             width=17,
             state="readonly",
+            textvariable=self.var_course,
         )
         course_combo["values"] = (
             "Select Courses",
@@ -124,6 +143,7 @@ class Student:
             font=("times new roman", 12, "bold"),
             width=17,
             state="readonly",
+            textvariable=self.var_year,
         )
         year_combo["values"] = (
             "Select year",
@@ -149,6 +169,7 @@ class Student:
             font=("times new roman", 12, "bold"),
             width=17,
             state="readonly",
+            textvariable=self.var_semester,
         )
         semester_combo["values"] = (
             "Select Semester",
@@ -186,7 +207,10 @@ class Student:
         studentID_label.grid(row=0, column=0, padx=10, pady=5, sticky=W)
 
         studentID_entry = ttk.Entry(
-            class_student_frame, width=20, font=("times new roman", 13, "bold")
+            class_student_frame,
+            width=20,
+            textvariable=self.var_StudentId,
+            font=("times new roman", 13, "bold"),
         )
         studentID_entry.grid(row=0, column=1, padx=10, pady=5, sticky=W)
 
@@ -200,7 +224,10 @@ class Student:
         studentName_label.grid(row=0, column=2, padx=10, pady=5, sticky=W)
 
         studentName_entry = ttk.Entry(
-            class_student_frame, width=20, font=("times new roman", 13, "bold")
+            class_student_frame,
+            textvariable=self.var_StudentName,
+            width=20,
+            font=("times new roman", 13, "bold"),
         )
         studentName_entry.grid(row=0, column=3, padx=10, sticky=W)
 
@@ -210,11 +237,15 @@ class Student:
             text="Division:",
             font=("times new roman", 12, "bold"),
             bg="white",
+            textvariable=self.var_Studentdiv,
         )
         student_div_label.grid(row=1, column=0, padx=10, pady=5, sticky=W)
 
         student_div_entry = ttk.Entry(
-            class_student_frame, width=20, font=("times new roman", 13, "bold")
+            class_student_frame,
+            textvariable=self.var_Studentdiv,
+            width=20,
+            font=("times new roman", 13, "bold"),
         )
         student_div_entry.grid(row=1, column=1, padx=10, pady=5, sticky=W)
 
@@ -228,7 +259,10 @@ class Student:
         student_gender_label.grid(row=1, column=2, padx=10, pady=5, sticky=W)
 
         student_gender_entry = ttk.Entry(
-            class_student_frame, width=20, font=("times new roman", 13, "bold")
+            class_student_frame,
+            textvariable=self.var_Studentgender,
+            width=20,
+            font=("times new roman", 13, "bold"),
         )
         student_gender_entry.grid(row=1, column=3, padx=10, sticky=W)
 
@@ -242,7 +276,10 @@ class Student:
         student_dob_label.grid(row=2, column=0, padx=10, pady=5, sticky=W)
 
         student_dob_entry = ttk.Entry(
-            class_student_frame, width=20, font=("times new roman", 13, "bold")
+            class_student_frame,
+            width=20,
+            textvariable=self.var_DOB,
+            font=("times new roman", 13, "bold"),
         )
         student_dob_entry.grid(row=2, column=1, padx=10, pady=5, sticky=W)
 
@@ -256,18 +293,27 @@ class Student:
         student_email_label.grid(row=2, column=2, padx=10, pady=5, sticky=W)
 
         student_email_entry = ttk.Entry(
-            class_student_frame, width=20, font=("times new roman", 13, "bold")
+            class_student_frame,
+            textvariable=self.var_email,
+            width=20,
+            font=("times new roman", 13, "bold"),
         )
         student_email_entry.grid(row=2, column=3, padx=10, sticky=W)
 
         # radio button ************************
         radiobtn1 = ttk.Radiobutton(
-            class_student_frame, text="Take a Photo Sample", value="Yes"
+            class_student_frame,
+            textvariable=self.var_radio1,
+            text="Take a Photo Sample",
+            value="Yes",
         )
         radiobtn1.grid(row=6, column=0)
 
         radiobtn2 = ttk.Radiobutton(
-            class_student_frame, text="Do not  a Photo Sample", value="Yes"
+            class_student_frame,
+            textvariable=self.var_radio2,
+            text="Do not  a Photo Sample",
+            value="No",
         )
         radiobtn2.grid(row=6, column=1)
 
@@ -282,6 +328,7 @@ class Student:
 
         save_btn = Button(
             btn_frame,
+            command = self.add_data,
             text="Save",
             font=("times new roman", 13, "bold"),
             bg="blue",
@@ -347,137 +394,23 @@ class Student:
             width="17",
         )
         update_photo_btn.grid(row=0, column=1)
-        #
-        #
-        #
-        # right frame
-        Right_frame = LabelFrame(
-            main_frame,
-            bd=2,
-            bg="white",
-            relief=RIDGE,
-            text="Students Details",
-            font=("times new roman", 12, "bold"),
-        )
-        Right_frame.place(x=780, y=10, width=760, height=580)
 
-        img_path = r"C:\Users\91799\Desktop\Pythonic-pioneers\Images\background.png"
-        img_right = Image.open(img_path)
-        img_right = img_right.resize(
-            (1530, 710), resample=Image.LANCZOS
-        )  # Use LANCZOS for antialiasing
-        self.photoimg_right = ImageTk.PhotoImage(img_right)
-
-        bg_img_right = Label(Right_frame, image=self.photoimg_right)
-        bg_img_right.place(x=5, y=0, width=720, height=130)
-
-        #   search system
-
-        search_frame = LabelFrame(
-            Right_frame,
-            bd=2,
-            bg="white",
-            relief=RIDGE,
-            text="Search system ",
-            font=("times new roman", 12, "bold"),
-        )
-        search_frame.place(x=5, y=135, width=710, height=70)
-
-        search_label = Label(
-            search_frame,
-            text="Search By:",
-            font=("times new roman", 15, "bold"),
-            bg="red",
-        )
-        search_label.grid(row=0, column=0, padx=10, pady=5, sticky=W)
-
-        search_combo = ttk.Combobox(
-            search_frame,
-            font=("times new roman", 12, "bold"),
-            width=17,
-            state="readonly",
-        )
-        search_combo["values"] = (
-            "Select ",
-            "RollNo",
-            "IV",
-            "III",
-            "IV",
-            "V",
-            "VI",
-            "VII",
-            "VIII",
-        )
-        search_combo.current(0)
-        search_combo.grid(row=0, column=1, padx=2, pady=10, sticky=W)
-
-        search_entry = ttk.Entry(
-            search_frame, width=15, font=("times new roman", 12, "bold")
-        )
-        search_entry.grid(row=0, column=2, padx=10, sticky=W)
-        # button
-        search_btn = Button(
-            search_frame,
-            text="Search",
-            font=("times new roman", 12, "bold"),
-            bg="blue",
-            fg="white",
-            width="10",
-        )
-        search_btn.grid(row=0, column=3)
-
-        showall_btn = Button(
-            search_frame,
-            text="Show All",
-            font=("times new roman", 12, "bold"),
-            bg="blue",
-            fg="white",
-            width="10",
-        )
-        showall_btn.grid(row=0, column=4)
-
-        # table
-        table_frame = Frame(
-            Right_frame,
-            bd=2,
-            bg="white",
-            relief=RIDGE,
-            # font=("times new roman", 12, "bold"),
-        )
-        table_frame.place(x=5, y=210, width=710, height=350)
-
-        scroll_x = ttk.Scrollbar(table_frame, orient=HORIZONTAL)
-        scroll_y = ttk.Scrollbar(table_frame, orient=VERTICAL)
-
-        self.student_table = ttk.Treeview(
-            table_frame,
-            column=("dep", "course", "year", "rollno", "gender"),
-            xscrollcommand=scroll_x.set,
-            yscrollcommand=scroll_y.set,
-        )
-        scroll_x.pack(side=BOTTOM, fill=X)
-        scroll_y.pack(side=RIGHT, fill=Y)
-
-        scroll_x.config(command=self.student_table.xview)
-        scroll_y.config(command=self.student_table.yview)
-
-        self.student_table.heading("dep", text="Department")
-        self.student_table.heading("course", text="Course")
-        self.student_table.heading("year", text="Year")
-        self.student_table.heading("rollno", text="Roll NO")
-        self.student_table.heading("gender", text="Gender")
-        self.student_table["show"] = "headings"
-
-        self.student_table.column("dep", width=100)
-        self.student_table.column("course", width=100)
-        self.student_table.column("year", width=100)
-        self.student_table.column("rollno", width=100)
-        self.student_table.column("gender", width=100)
-
-        self.student_table.pack(fill=BOTH, expand=1)
-
+    def add_data(self):
+        if (
+            self.var_dep.get() == "Select Department"
+            or self.var_StudentName.get() == ""
+            or self.var_StudentId.get() == ""
+        ):
+            messagebox.showerror("Error", "All field are mandatory", parent = self.root)
+        else:
+            conn = mysql.connector.connect(host="localhost", username = "root", password = "Ayushi@8383", database = "face_recognition")
+            my_cursor = conn.cursor()
+            my_cursor.execute("insert into (tablename) values(%s col name uthane likhna hai) ", ())
 
 if __name__ == "__main__":
     root = Tk()
     obj = Student(root)
     root.mainloop()
+
+
+# -----------------generate data set take photo sample -------------------

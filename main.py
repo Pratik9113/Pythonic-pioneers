@@ -1,135 +1,80 @@
 from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
-import sys
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialog, QApplication, QMessageBox
-from PyQt5.uic import loadUi
-import mysql.connector as con
-import bcrypt
+from student import Student
 
 
-# import student
-class LoginApp(QDialog):
-    def __init__(self):
-        super(LoginApp, self).__init__()
-        loadUi("loginform.ui", self)
-        self.b1.clicked.connect(self.login)
-        self.b2.clicked.connect(self.show_reg)
+class Face_Recognition_System:
+    def __init__(self, root):
+        self.root = root
+        self.root.geometry("1080x720")
+        self.root.title("face recognition system")
 
-    def login(self):
-        em = self.tb1.text()
-        pw = self.tb2.text()
+        # left image of sign in....
+        # img = Image.open("image path0")
+        # img = img.resize((height, width), Image.ANTIALIAS)
+        # self.photoimg = ImageTk.PhotoImage(img)
+        # f_lbl = Label(self.root, image=self.photoimg)
+        # f_lbl.place(width ,height)
 
-        try:
-            with con.connect(
-                host="localhost",
-                user="root",
-                password="Ayushi@8383",
-                db="face_recognition",
-            ) as db:
-                cursor = db.cursor()
-                cursor.execute(
-                    "SELECT * FROM student WHERE email=%s AND password=%s", (em, pw)
-                )
-                result = cursor.fetchone()
+        # background page
+        imgbg1 = Image.open(r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png")
+        imgbg1 = imgbg1.resize(
+            (1080, 720), Image.BILINEAR
+        )  # Change to your desired filter
+        self.photoimg1 = ImageTk.PhotoImage(imgbg1)
 
-                self.tb1.setText("")
-                self.tb2.setText("")
+        bg_img = Label(self.root, image=self.photoimg1)
+        bg_img.place(width=1080, height=720)
 
-                if result:
-                    QMessageBox.information(
-                        self, "Login Output", "Congrats!!! You Login"
-                    )
-                else:
-                    QMessageBox.information(
-                        self, "Login Output", "User name is not registered"
-                    )
+        # title
 
-        except con.Error as err:
-            print(f"Database Error: {err}")
+        # option
+        # Button 1
+        # student details
+        img4 = Image.open(r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png")
+        img4 = img4.resize((200, 120), Image.BILINEAR)
+        self.photoimg4 = ImageTk.PhotoImage(img4)
+        b1 = Button(
+            bg_img, image=self.photoimg4, command=self.student_details, cursor="hand2"
+        )
+        b1.place(width=200, height=120, x=10, y=20)
 
-    def show_reg(self):
-        widget.setCurrentIndex(1)
+        b1_1 = Button(
+            bg_img, text="student details", command=self.student_details, cursor="hand2"
+        )
+        b1_1.place(x=10, y=90, width=200, height=40)
+        # Button 2
+        img5 = Image.open(r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png")
+        img5 = img5.resize((200, 120), Image.BILINEAR)
+        self.photoimg5 = ImageTk.PhotoImage(img5)
+        b2 = Button(bg_img, image=self.photoimg5, cursor="hand2")
+        b2.place(width=200, height=120, x=220, y=20)
 
+        # Button 3
+        img6 = Image.open(r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png")
+        img6 = img6.resize((200, 120), Image.BILINEAR)
+        self.photoimg6 = ImageTk.PhotoImage(img6)
+        b3 = Button(bg_img, image=self.photoimg6, cursor="hand2")
+        b3.place(width=200, height=120, x=430, y=20)
 
-class RegisterApp(QDialog):
-    def __init__(self):
-        super(RegisterApp, self).__init__()
-        loadUi("signupform.ui", self)
-        self.b3.clicked.connect(self.reg)
-        self.b4.clicked.connect(self.show_login)
+        # Button 4
+        img7 = Image.open(r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png")
+        img7 = img7.resize((200, 120), Image.BILINEAR)
+        self.photoimg7 = ImageTk.PhotoImage(img7)
+        b4 = Button(bg_img, image=self.photoimg7, cursor="hand2")
+        b4.place(width=200, height=120, x=640, y=20)
 
-    def reg(self):
-        un = self.tb3.text()
-        pw = self.tb4.text()
-        em = self.tb5.text()
+        # function button
 
-        try:
-            with con.connect(
-                host="localhost",
-                user="root",
-                password="Ayushi@8383",
-                db="face_recognition",
-            ) as db:
-                cursor = db.cursor()
-                cursor.execute(
-                    "SELECT * FROM student WHERE full_name = %s AND password = %s",
-                    (un, pw),
-                )
-                result = cursor.fetchone()
+        # 1 student details
 
-                if result:
-                    QMessageBox.information(
-                        self, "Login form", "User already registered"
-                    )
-                else:
-                    cursor.execute(
-                        "INSERT INTO student (full_name, password, email) VALUES (%s, %s, %s)",
-                        (un, pw, em),
-                    )
-                    db.commit()
-                    QMessageBox.information(
-                        self, "Login form", "User successfully registered"
-                    )
-
-        except con.Error as err:
-            print(f"Database Error: {err}")
-
-    def show_login(self):
-        widget.setCurrentIndex(0)
+    def student_details(self):
+        self.new_window = Toplevel(self.root)
+        self.app = Student(self.new_window)
 
 
-# class Face_Recognition_System:
-#     def __init__(self, root):
-#         self.root = root
-#         # window setup
-#         self.root.geometry("1080x720")
-#         self.root.title("face recognition ")
-
-#         # image background
-#         img = Image.open("./Images/backgroundimage_py.png")
-#         img.thumbnail((500, 130))
-#         self.photoimg = ImageTk.PhotoImage(img)
-
-#         # window set - background
-#         firstLabel = Label(self.root, image=self.photoimg)
-#         firstLabel.place(width=500, height=130)
-
-
-# if __name__ == "__main__":
-#     root = Tk()
-#     obj = Face_Recognition_System(root)
-#     root.mainloop()
-app = QApplication(sys.argv)
-widget = QtWidgets.QStackedWidget()
-loginform = LoginApp()
-registrationform = RegisterApp()
-widget.addWidget(loginform)
-widget.addWidget(registrationform)
-widget.setCurrentIndex(0)
-widget.setFixedWidth(1080)
-widget.setFixedHeight(720)
-widget.show()
-
-app.exec_()
+if __name__ == "__main__":
+    root = Tk()
+    obj = Face_Recognition_System(root)
+    root.mainloop()
