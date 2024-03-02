@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import filedialog
+import os
 from PIL import Image, ImageTk
 from tkinter import messagebox
 import mysql.connector
@@ -29,7 +31,7 @@ class Student:
         self.var_radio2 = StringVar()
 
         # Background image
-        img_path = r"C:\Users\91799\Desktop\Pythonic-pioneers\Images\background.png"
+        img_path = r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png"
         img3 = Image.open(img_path)
         img3 = img3.resize(
             (1080, 720), resample=Image.LANCZOS
@@ -55,7 +57,7 @@ class Student:
         )
         Left_frame.place(x=10, y=10, width=760, height=580)
 
-        img_path = r"C:\Users\91799\Desktop\Pythonic-pioneers\Images\background.png"
+        img_path = r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png"
         img_left = Image.open(img_path)
         img_left = img_left.resize(
             (1530, 710), resample=Image.LANCZOS
@@ -532,7 +534,7 @@ class Student:
             except Exception as es:
                 messagebox.showerror("error", f"due to : {str(es)}", parent=self.root)
 
-    ## generate data set an take photo sample
+    # generate data set an take photo sample
     # def generate_dataset(self):
     #     if (
     #         self.var_dep.get() == "Select Department"
@@ -597,9 +599,7 @@ class Student:
     #                     img_id += 1
     #                 face = cv2.resize(face_cropped(my_frame), (450, 450))
     #                 face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
-    #                 file_name_path = (
-    #                     "data/user." + str(img_id) + "." + str(img_id) + ".jpg"
-    #                 )
+    #                 file_name_path = "data/user." + str(id) + "." + str(img_id) + ".jpg"
     #                 cv2.imwrite(file_name_path, face)
     #                 cv2.putText(
     #                     face,
@@ -621,92 +621,217 @@ class Student:
 
     #         except Exception as es:
     #             messagebox.showerror("error", f"due to : {str(es)}", parent=self.root)
+
+    
+    # 1 march - pratik patil updated code algo changed
+    # def generate_dataset(self):
+    #     # Open the camera
+    #     cap = cv2.VideoCapture(0)  # 0 corresponds to the default camera, you can change it if you have multiple cameras
+
+    #     # Capture a single frame
+    #     ret, frame = cap.read()
+
+    #     # Check if the frame is captured successfully
+    #     if ret:
+    #         # Get division and rollno from your database (replace these with your actual logic)
+    #         division = "A"
+    #         rollno = "123"
+
+    #         # Define the filename based on division and rollno
+    #         filename = f"data/{division}_{rollno}_photo.png"
+
+    #         # Save the captured frame as an image
+    #         cv2.imwrite(filename, frame)
+
+    #         # Display a success message
+    #         messagebox.showinfo("Capture Success", f"Photo captured and saved as {filename}")
+
+    #     # Release the camera
+    #     cap.release()
+    #     cv2.destroyAllWindows()
+    
+    # def generate_dataset(self):
+    # # Fetch division and rollno from the database based on student ID
+    #     student_id = self.var_StudentId.get()
+    #     studentname,division, rollno = self.fetch_division_and_rollno_from_database(student_id)
+
+    # # Check if division and rollno are fetched successfully
+    #     if studentname is not None and division is not None and rollno is not None:
+    #         # Open the camera
+    #         cap = cv2.VideoCapture(0)  # 0 corresponds to the default camera, you can change it if you have multiple cameras
+
+    #         # Capture a single frame
+    #         ret, frame = cap.read()
+
+    #         # Check if the frame is captured successfully
+    #         if ret:
+    #             # Define the filename based on division and rollno
+    #             filename = f"data/{studentname},{division},{rollno}.jpeg"
+
+    #             # Save the captured frame as an image
+    #             cv2.imwrite(filename, frame)
+
+    #             # Display a success message
+    #             messagebox.showinfo("Capture Success", f"Photo captured and saved as {filename}")
+
+    #         # Release the camera
+    #         cap.release()
+    #         cv2.destroyAllWindows()
+    #     else:
+    #         # Display an error message if division or rollno is not found
+    #         messagebox.showerror("Error", "Failed to fetch division and rollno from the database")
     def generate_dataset(self):
-        if (
-            self.var_dep.get() == "Select Department"
-            or self.var_StudentName.get() == ""
-            or self.var_StudentId.get() == ""
-        ):
-            messagebox.showerror("Error", "All fields are mandatory", parent=self.root)
-        else:
-            try:
-                conn = mysql.connector.connect(
-                    host="localhost",
-                    username="root",
-                    password="Pratik@6878",
-                    database="face_recognition",
-                )
-                my_cursor = conn.cursor()
-                my_cursor.execute("select * from student")
-                myresult = my_cursor.fetchall()
-                id = 0
-                for x in myresult:
-                    id += 1
-                my_cursor.execute(
-                    "update studentdetails set dep =%s,course=%s,year=%s,semester =%s,studentname =%s,studentdiv=%s,studentgender=%s,dob=%s,email=%s where studentid = %s",
-                    (
-                        self.var_dep.get(),
-                        self.var_course.get(),
-                        self.var_year.get(),
-                        self.var_semester.get(),
-                        self.var_StudentName.get(),
-                        self.var_Studentdiv.get(),
-                        self.var_Studentgender.get(),
-                        self.var_DOB.get(),
-                        self.var_email.get(),
-                        self.var_StudentId.get(),
-                    ),
-                )
-                conn.commit()
-                conn.close()
+        # Fetch division and rollno from the database based on student ID
+        student_id = self.var_StudentId.get()
+        studentname, division, rollno = self.fetch_division_and_rollno_from_database(student_id)
 
-                # load predefined data on the front page
-                face_classifier = cv2.CascadeClassifier(
-                    "haarcascade_frontalface_default.xml"
-                )
+        # Check if division and rollno are fetched successfully
+        if studentname is not None and division is not None and rollno is not None:
+            # Open the camera
+            cap = cv2.VideoCapture(0)  # 0 corresponds to the default camera, you can change it if you have multiple cameras
 
-                def face_cropped(img):
-                    # Convert to grayscale
-                    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                    faces = face_classifier.detectMultiScale(gray, 1.3, 5)
+            while True:
+                # Capture a single frame
+                ret, frame = cap.read()
 
-                    for x, y, w, h in faces:
-                        face_cropped = img[y : y + h, x : x + w]
-                        return face_cropped
+                # Check if the frame is captured successfully
+                if ret:
+                    cv2.imshow("Webcam", frame)
 
-                cap = cv2.VideoCapture(0)
-                img_id = 0
-                while True:
-                    ret, my_frame = cap.read()
-                    cropped_face = face_cropped(my_frame)
-                    if cropped_face is not None:
-                        img_id += 1
-                        face = cv2.resize(cropped_face, (450, 450))
-                        face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
-                        file_name_path = (
-                            "data/user." + str(id) + "." + str(img_id) + ".jpg"
-                        )
-                        cv2.imwrite(file_name_path, face)
-                        cv2.putText(
-                            face,
-                            str(img_id),
-                            (50, 50),
-                            cv2.FONT_HERSHEY_COMPLEX,
-                            2,
-                            (0, 255, 0),
-                            2,
-                        )
-                        cv2.imshow("Cropped Face", face)
+                    # Wait for the 'c' key press
+                    key = cv2.waitKey(1) & 0xFF
+                    if key == ord("c"):
+                        # Define the filename based on division and rollno
+                        filename = f"data/{studentname},{division},{rollno}.jpeg"
 
-                    if cv2.waitKey(1) == 13 or int(img_id) == 100:
+                        # Save the captured frame as an image
+                        cv2.imwrite(filename, frame)
+
+                        # Display a success message
+                        messagebox.showinfo("Capture Success", f"Photo captured and saved as {filename}")
+
+                        # Release the camera
+                        cap.release()
+                        cv2.destroyAllWindows()
                         break
 
-                cap.release()
-                cv2.destroyAllWindows()
-                messagebox.showinfo("Result", "Generating data sets completed !!!")
+                else:
+                    # Display an error message if the frame is not captured successfully
+                    messagebox.showerror("Error", "Failed to capture frame from the camera")
+                    break
 
-            except Exception as es:
-                messagebox.showerror("Error", f"Due to: {str(es)}", parent=self.root)
+        else:
+            # Display an error message if division or rollno is not found
+            messagebox.showerror("Error", "Failed to fetch division and rollno from the database")
+    def fetch_division_and_rollno_from_database(self, student_id):
+        try:
+            conn = mysql.connector.connect(
+                host="localhost",
+                username="root",
+                password="Pratik@6878",
+                database="face_recognition",
+            )
+            my_cursor = conn.cursor()
+            my_cursor.execute(
+                "SELECT  studentname,studentdiv,studentid FROM studentdetails WHERE studentid = %s",
+                (student_id,),
+            )
+            result = my_cursor.fetchone()
+            conn.close()
+
+            if result:
+                return result
+            else:
+                return None, None , None
+        except Exception as es:
+            messagebox.showerror("Error", f"Failed to fetch data from the database: {str(es)}")
+            return None, None , None 
+
+    # def generate_dataset(self):
+    #     if (
+    #         self.var_dep.get() == "Select Department"
+    #         or self.var_StudentName.get() == ""
+    #         or self.var_StudentId.get() == ""
+    #     ):
+    #         messagebox.showerror("Error", "All fields are mandatory", parent=self.root)
+    #     else:
+    #         try:
+    #             conn = mysql.connector.connect(
+    #                 host="localhost",
+    #                 username="root",
+    #                 password="Pratik@6878",
+    #                 database="face_recognition",
+    #             )
+    #             my_cursor = conn.cursor()
+    #             my_cursor.execute("select * from student")
+    #             myresult = my_cursor.fetchall()
+    #             id = 0
+    #             for x in myresult:
+    #                 id += 1
+    #             my_cursor.execute(
+    #                 "update studentdetails set dep =%s,course=%s,year=%s,semester =%s,studentname =%s,studentdiv=%s,studentgender=%s,dob=%s,email=%s where studentid = %s",
+    #                 (
+    #                     self.var_dep.get(),
+    #                     self.var_course.get(),
+    #                     self.var_year.get(),
+    #                     self.var_semester.get(),
+    #                     self.var_StudentName.get(),
+    #                     self.var_Studentdiv.get(),
+    #                     self.var_Studentgender.get(),
+    #                     self.var_DOB.get(),
+    #                     self.var_email.get(),
+    #                     self.var_StudentId.get(),
+    #                 ),
+    #             )
+    #             conn.commit()
+    #             conn.close()
+
+    #             # load predefined data on the front page
+    #             face_classifier = cv2.CascadeClassifier(
+    #                 "haarcascade_frontalface_default.xml"
+    #             )
+
+    #             def face_cropped(img):
+    #                 # Convert to grayscale
+    #                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #                 faces = face_classifier.detectMultiScale(gray, 1.3, 5)
+
+    #                 for x, y, w, h in faces:
+    #                     face_cropped = img[y : y + h, x : x + w]
+    #                     return face_cropped
+
+    #             cap = cv2.VideoCapture(0)
+    #             img_id = 0
+    #             id = self.var_StudentId.get()
+    #             while True:
+    #                 ret, my_frame = cap.read()
+    #                 cropped_face = face_cropped(my_frame)
+    #                 if cropped_face is not None:
+    #                     img_id += 1
+    #                     face = cv2.resize(cropped_face, (450, 450))
+    #                     face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+    #                     file_name_path = f"data/user.{id}.{img_id}.jpg"
+    #                     cv2.imwrite(file_name_path, face)
+    #                     cv2.putText(
+    #                         face,
+    #                         str(img_id),
+    #                         (50, 50),
+    #                         cv2.FONT_HERSHEY_COMPLEX,
+    #                         2,
+    #                         (0, 255, 0),
+    #                         2,
+    #                     )
+    #                     cv2.imshow("Cropped Face", face)
+
+    #                 if cv2.waitKey(1) == 13 or int(img_id) == 10:
+    #                     break
+
+    #             cap.release()
+    #             cv2.destroyAllWindows()
+    #             messagebox.showinfo("Result", "Generating data sets completed !!!")
+
+    #         except Exception as es:
+    #             messagebox.showerror("Error", f"Due to: {str(es)}", parent=self.root)
 
 
 if __name__ == "__main__":

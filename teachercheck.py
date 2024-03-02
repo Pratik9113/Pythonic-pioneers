@@ -12,7 +12,7 @@ class AdminView:
         self.root.title("student")
 
         # Background image
-        img_path = r"C:\Users\91799\Desktop\Pythonic-pioneers\Images\background.png"
+        img_path = r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png"
         img3 = Image.open(img_path)
         img3 = img3.resize(
             (1080, 710), resample=Image.LANCZOS
@@ -36,7 +36,7 @@ class AdminView:
         )
         Right_frame.place(x=0, y=0, width=1000, height=700)
 
-        img_path = r"C:\Users\91799\Desktop\Pythonic-pioneers\Images\background.png"
+        img_path = r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png"
         img_right = Image.open(img_path)
         img_right = img_right.resize(
             (1530, 710), resample=Image.LANCZOS
