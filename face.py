@@ -107,8 +107,13 @@ import cv2
 import numpy as np
 import face_recognition
 import os
+import time
 from datetime import datetime
+import threading
+from datetime import datetime, date
 
+# A dictionary to store the last marked date for each person
+lastMarkedDate = {}
 path = r"C:\Users\91799\Desktop\face reco using firefox\data"
 images = []
 classNames = []
@@ -128,6 +133,46 @@ def findEncodings(images):
         encodeList.append(encode)
     return encodeList
 
+# def markAttendance(name):
+#     with open("Attendance.csv", "r+") as f:
+#         myDataList = f.readlines()
+#         nameList = [line.split(",")[0] for line in myDataList]
+#         if name not in nameList:
+#             now = datetime.now()
+#             dtString = now.strftime("%H:%M:%S")
+#             f.write(f"\n{name},{dtString}")
+# def markAttendance(name):
+#     with open("Attendance.csv", "r+") as f:
+#         myDataList = f.readlines()
+#         nameList = [line.split(",")[0] for line in myDataList]
+#         if name not in nameList:
+#             now = datetime.now()
+#             dtString = now.strftime("%H:%M:%S")
+#             f.write(f"\n{name},{dtString}")
+            
+#             # Introduce a time delay (e.g., 30 seconds)
+#             time.sleep(30)
+
+# encodeListKnown = findEncodings(images)
+# print("Encoding Complete")
+
+# cap = cv2.VideoCapture(0)
+
+
+# def markAttendance(name):
+#     with open("Attendance.csv", "r+") as f:
+#         myDataList = f.readlines()
+#         nameList = [line.split(",")[0] for line in myDataList]
+#         if name not in nameList:
+#             now = datetime.now()
+#             dtString = now.strftime("%H:%M:%S")
+#             f.write(f"\n{name},{dtString}")
+
+# def markAttendanceWithDelay(name):
+#     markAttendance(name)
+#     # Introduce a time delay (e.g., 30 seconds) in a separate thread
+#     threading.Thread(target=lambda: time.sleep(30)).start()
+
 def markAttendance(name):
     with open("Attendance.csv", "r+") as f:
         myDataList = f.readlines()
@@ -135,7 +180,19 @@ def markAttendance(name):
         if name not in nameList:
             now = datetime.now()
             dtString = now.strftime("%H:%M:%S")
-            f.write(f"\n{name},{dtString}")
+            
+            # Check if the person was already marked today
+            if name in lastMarkedDate and lastMarkedDate[name] == date.today():
+                print(f"{name} has already been marked today.")
+            else:
+                f.write(f"\n{name},{dtString}")
+                lastMarkedDate[name] = date.today()
+                print(f"{name} marked for attendance on {date.today()}.")
+                
+def markAttendanceWithDelay(name):
+    markAttendance(name)
+    # Introduce a time delay (e.g., 30 seconds) in a separate thread
+    threading.Thread(target=lambda: time.sleep(30)).start()
 
 encodeListKnown = findEncodings(images)
 print("Encoding Complete")

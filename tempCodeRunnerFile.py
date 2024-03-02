@@ -1,1 +1,1 @@
-self.fetch_data()
+30
