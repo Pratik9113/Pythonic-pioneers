@@ -1,30 +1,32 @@
-import cv2
-from simple_facerec import SimpleFacerec
+import pandas as pd
+import xlsxwriter
+# Read CSV file
+csv_file_path = 'Attendance.csv'
+df = pd.read_csv(csv_file_path, header=None, names=['Name', 'Division', 'Roll', 'Time'])
 
-# Encode faces from a folder
-sfr = SimpleFacerec()
-sfr.load_encoding_images("/images")
+# Create a new Excel file
+excel_file_path = 'Attendance.xlsx'
+with pd.ExcelWriter(excel_file_path, engine='xlsxwriter') as writer:
+    # Write the DataFrame to the Excel file
+    df.to_excel(writer, index=False, sheet_name='Attendance')
 
-# Load Camera
-cap = cv2.VideoCapture(2)
+    # Access the XlsxWriter workbook and worksheet objects
+    workbook = writer.book
+    worksheet = writer.sheets['Attendance']
 
+    # Get the dimensions of the DataFrame
+    num_rows, num_cols = df.shape
 
-while True:
-    ret, frame = cap.read()
+    # Create a list of column headers to use in add_table()
+    column_settings = [{'header': column} for column in df.columns]
 
-    # Detect Faces
-    face_locations, face_names = sfr.detect_known_faces(frame)
-    for face_loc, name in zip(face_locations, face_names):
-        y1, x2, y2, x1 = face_loc[0], face_loc[1], face_loc[2], face_loc[3]
+    # Add the Excel table structure. Pandas will add the data
+    worksheet.add_table(0, 0, num_rows, num_cols - 1, {'columns': column_settings})
 
-        cv2.putText(frame, name,(x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 200), 2)
-        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 200), 4)
+    # Adjust the column width for better readability
+    for i, col in enumerate(df.columns):
+        max_len = df[col].astype(str).str.len().max()
+        max_len = max_len if max_len > len(col) else len(col)
+        worksheet.set_column(i, i, max_len + 2)
 
-    cv2.imshow("Frame", frame)
-
-    key = cv2.waitKey(1)
-    if key == 27:
-        break
-
-cap.release()
-cv2.destroyAllWindows()
+print(f"Spreadsheet created successfully: {excel_file_path}")
