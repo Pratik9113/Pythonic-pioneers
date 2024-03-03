@@ -329,7 +329,7 @@ class FaceRecognitionApp:
     def markAttendanceWithDelay(self, name):
         self.markAttendance(name)
         # Introduce a time delay (e.g., 30 seconds) in a separate thread
-        threading.Thread(target=lambda: time.sleep(30)).start()
+        threading.Thread(target=lambda: time.sleep(3500)).start()
 
     def markAttendance(self, name):
         with open("Attendance.csv", "r+") as f:
@@ -337,7 +337,7 @@ class FaceRecognitionApp:
             nameList = [line.split(",")[0] for line in myDataList]
             if name not in nameList:
                 now = datetime.now()
-                dtString = now.strftime("%Y-%m-%d %H:%M:%S")
+                dtString = now.strftime("%Y-%m-%d,%H:%M:%S")
 
                 # Check if the person was already marked today
                 if name in self.lastMarkedDate and self.lastMarkedDate[name] == date.today():
