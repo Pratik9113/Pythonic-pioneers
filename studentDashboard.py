@@ -4,7 +4,8 @@ from PIL import Image, ImageTk
 from student import Student
 import os
 from train import Train
-from face_recognition import Face_Recognition
+from face import FaceRecognitionApp
+# from face_recognition import Face_Recognition
 
 
 class Face_Recognition_System:
@@ -47,16 +48,17 @@ class Face_Recognition_System:
             bg_img, text="student details", command=self.student_details, cursor="hand2"
         )
         b1_1.place(x=10, y=90, width=200, height=40)
-        # Button 2
+
+
         img5 = Image.open(r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png")
         img5 = img5.resize((200, 120), Image.BILINEAR)
         self.photoimg5 = ImageTk.PhotoImage(img5)
         b2 = Button(
-            bg_img, image=self.photoimg5, command=self.face_data, cursor="hand2"
+            bg_img, image=self.photoimg5, command=self.face_recog, cursor="hand2"
         )
         b2.place(width=200, height=120, x=220, y=20)
 
-        b1_2 = Button(bg_img, text="face recog", command=self.face_data, cursor="hand2")
+        b1_2 = Button(bg_img, text="face_recog", command=self.face_recog, cursor="hand2")
         b1_2.place(x=220, y=90, width=200, height=40)
 
         # Button 3
@@ -93,13 +95,17 @@ class Face_Recognition_System:
         self.new_window = Toplevel(self.root)
         self.app = Student(self.new_window)
 
+    def face_recog(self):
+        self.new_window = Toplevel(self.root)
+        self.app = FaceRecognitionApp(self.new_window)
+        
     def train_data(self):
         self.new_window = Toplevel(self.root)
         self.app = Train(self.new_window)
 
-    def face_data(self):
-        self.new_window = Toplevel(self.root)
-        self.app = Face_Recognition(self.new_window)
+    # def face_data(self):
+    #     self.new_window = Toplevel(self.root)
+    #     self.app = Face_Recognition(self.new_window)
 
 
 if __name__ == "__main__":

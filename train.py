@@ -9,7 +9,6 @@ import numpy as np
 
 print(cv2.__version__)
 
-
 class Train:
     def __init__(self, root):
         self.root = root

@@ -1,3 +1,5 @@
+database - use face_recognition
+
 student details 
 CREATE TABLE studentdetails (
 	studentid INT PRIMARY KEY,
