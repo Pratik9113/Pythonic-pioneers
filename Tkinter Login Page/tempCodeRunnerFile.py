@@ -1,1 +1,8 @@
-from path.to.studentDashboard import Face_Recognition_System
+
+from tkinter import *
+from PIL import Image, ImageTk
+from tkinter import messagebox
+import mysql.connector as mysql
+import credentials as cr
+
+class SignUp:

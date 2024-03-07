@@ -1,14 +1,11 @@
 from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
-
 import mysql.connector
-
-
 class AdminView:
     def __init__(self, root):
         self.root = root
-        self.root.geometry("1020x720+0+0")
+        self.root.geometry("1020x720+200+45")
         self.root.title("student")
 
         # Background image

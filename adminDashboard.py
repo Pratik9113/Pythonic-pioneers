@@ -8,7 +8,9 @@ from face import FaceRecognitionApp
 # from face_recognition import Face_Recognition
 from Visualize_day_wise_attandence import AttendanceVisualization
 
-class Face_Recognition_System:
+# start from admin 
+from teachercheck import AdminView
+class AdminDashboard:
     def __init__(self, root):
         self.root = root
         self.root.geometry("1080x720+200+45")
@@ -40,12 +42,12 @@ class Face_Recognition_System:
         img4 = img4.resize((300, 300), Image.BILINEAR)
         self.photoimg4 = ImageTk.PhotoImage(img4)
         b1 = Button(
-            bg_img, image=self.photoimg4, command=self.student_details, cursor="hand2"
+            bg_img, image=self.photoimg4, command=self.teacherview, cursor="hand2"
         )
         b1.place(width=300, height=300, x=40, y=40)
 
         b1_1 = Button(
-            bg_img, text="student details", command=self.student_details, cursor="hand2"
+            bg_img, text="Student Data", command=self.teacherview, cursor="hand2"
         )
         b1_1.place(x=40, y=295, width=300, height=40)
 
@@ -54,11 +56,11 @@ class Face_Recognition_System:
         img5 = img5.resize((300, 300), Image.BILINEAR)
         self.photoimg5 = ImageTk.PhotoImage(img5)
         b2 = Button(
-            bg_img, image=self.photoimg5, command=self.face_recog, cursor="hand2"
+            bg_img, image=self.photoimg5, command=self.trainthedata, cursor="hand2"
         )
         b2.place(width=300, height=300, x=390, y=40)
 
-        b1_2 = Button(bg_img, text="face_recognition (PRESS Q to exit)", command=self.face_recog, cursor="hand2")
+        b1_2 = Button(bg_img, text="Train the Data", command=self.trainthedata, cursor="hand2")
         b1_2.place(x=390, y=295, width=300, height=40)
 
         # Button 3
@@ -107,8 +109,28 @@ class Face_Recognition_System:
     #     self.new_window = Toplevel(self.root)
     #     self.app = Face_Recognition(self.new_window)
 
+    
+    def teacherview(self):
+        self.new_window = Toplevel(self.root)
+        self.app = AdminView(self.new_window)
+        
+    def trainthedata(self):
+        self.new_window = Toplevel(self.root)
+        self.app = AttendanceProcessor(self.new_window)
 
+    def trainthedata(self):
+        import pandas as pd
+        import tkinter as tk
+        from tkinter import messagebox
+        csv_file_path = 'Attendance.csv'
+        df = pd.read_csv(csv_file_path, header=None, names=['Name', 'Division', 'Roll', 'Date','Time'])
+        csv_output_path = 'Attendance_output.csv'
+        df.to_csv(csv_output_path, index=False)
+        print(f"CSV created successfully: {csv_output_path}")
+        messagebox.showinfo("Training Completed", "You have successfully processed the attendance data!")
+        
+        
 if __name__ == "__main__":
     root = Tk()
-    obj = Face_Recognition_System(root)
+    obj = AdminDashboard(root)
     root.mainloop()

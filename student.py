@@ -13,7 +13,7 @@ from teachercheck import AdminView
 class Student:
     def __init__(self, root):
         self.root = root
-        self.root.geometry("1080x720+0+0")
+        self.root.geometry("1080x720+200+45")
         self.root.title("student")
 
         # ------variable -------
@@ -31,7 +31,7 @@ class Student:
         self.var_radio2 = StringVar()
 
         # Background image
-        img_path = r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png"
+        img_path = r"C:\Users\91799\Desktop\Pythonic-pioneers\ImagesFace\student.png"
         img3 = Image.open(img_path)
         img3 = img3.resize(
             (1080, 720), resample=Image.LANCZOS
@@ -43,7 +43,7 @@ class Student:
 
         # Frames
         main_frame = Frame(bg_img, bd=2)
-        main_frame.place(x=40, y=0, width=1000, height=700)
+        main_frame.place(x=150, y=40, width=785, height=600)
 
         # left side frame
 
@@ -57,10 +57,10 @@ class Student:
         )
         Left_frame.place(x=10, y=10, width=760, height=580)
 
-        img_path = r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png"
+        img_path = r"C:\Users\91799\Desktop\Pythonic-pioneers\ImagesFace\student.png"
         img_left = Image.open(img_path)
         img_left = img_left.resize(
-            (1530, 710), resample=Image.LANCZOS
+            (720, 130), resample=Image.LANCZOS
         )  # Use LANCZOS for antialiasing
         self.photoimg_left = ImageTk.PhotoImage(img_left)
 
@@ -319,21 +319,21 @@ class Student:
         student_email_entry.grid(row=2, column=3, padx=10, sticky=W)
 
         # radio button ************************
-        radiobtn1 = ttk.Radiobutton(
-            class_student_frame,
-            variable=self.var_radio1,
-            text="Take a Photo Sample",
-            value="Yes",
-        )
-        radiobtn1.grid(row=6, column=0)
+        # radiobtn1 = ttk.Radiobutton(
+        #     class_student_frame,
+        #     variable=self.var_radio1,
+        #     text="Take a Photo Sample",
+        #     value="Yes",
+        # )
+        # radiobtn1.grid(row=6, column=0)
 
-        radiobtn2 = ttk.Radiobutton(
-            class_student_frame,
-            variable=self.var_radio2,
-            text="Do not  a Photo Sample",
-            value="No",
-        )
-        radiobtn2.grid(row=6, column=1)
+        # radiobtn2 = ttk.Radiobutton(
+        #     class_student_frame,
+        #     variable=self.var_radio2,
+        #     text="Do not  a Photo Sample",
+        #     value="No",
+        # )
+        # radiobtn2.grid(row=6, column=1)
 
         # button frame
         btn_frame = Frame(
@@ -342,7 +342,7 @@ class Student:
             relief=RIDGE,
             bg="white",
         )
-        btn_frame.place(x=0, y=200, width=715, height=40)
+        btn_frame.place(x=150, y=150, width=350, height=37)
 
         save_btn = Button(
             btn_frame,
@@ -352,6 +352,7 @@ class Student:
             bg="blue",
             fg="white",
             width="17",
+
         )
         save_btn.grid(row=0, column=0)
 
@@ -366,25 +367,25 @@ class Student:
         )
         update_btn.grid(row=0, column=1)
 
-        delete_btn = Button(
-            btn_frame,
-            text="Delete",
-            font=("times new roman", 13, "bold"),
-            bg="blue",
-            fg="white",
-            width="17",
-        )
-        delete_btn.grid(row=0, column=2)
+        # delete_btn = Button(
+        #     btn_frame,
+        #     text="Delete",
+        #     font=("times new roman", 13, "bold"),
+        #     bg="blue",
+        #     fg="white",
+        #     width="17",
+        # )
+        # delete_btn.grid(row=0, column=2)
 
-        reset_btn = Button(
-            btn_frame,
-            text="Reset",
-            font=("times new roman", 13, "bold"),
-            bg="blue",
-            fg="white",
-            width="17",
-        )
-        reset_btn.grid(row=0, column=3)
+        # reset_btn = Button(
+        #     btn_frame,
+        #     text="Reset",
+        #     font=("times new roman", 13, "bold"),
+        #     bg="blue",
+        #     fg="white",
+        #     width="17",
+        # )
+        # reset_btn.grid(row=0, column=3)
 
         btn_frame1 = Frame(
             class_student_frame,
@@ -392,28 +393,35 @@ class Student:
             relief=RIDGE,
             bg="white",
         )
-        btn_frame1.place(x=0, y=235, width=715, height=40)
+        btn_frame1.place(x=165, y=200, width=325, height=90)
 
         take_photo_btn = Button(
             btn_frame1,
             command=self.generate_dataset,
-            text="take photo sample",
+            text="Take/Update Photo Sample.",
             font=("times new roman", 13, "bold"),
             bg="blue",
             fg="white",
-            width="17",
+            width="20",
         )
         take_photo_btn.grid(row=0, column=0)
 
-        update_photo_btn = Button(
+        Camera_label = Label(
             btn_frame1,
-            text="update photo sample",
-            font=("times new roman", 13, "bold"),
-            bg="blue",
-            fg="white",
-            width="17",
+            text="PRESS 'C' FOR CAPTURING THE PHOTO",
+            font=("times new roman", 12, "bold"),
+            bg="white",
         )
-        update_photo_btn.grid(row=0, column=1)
+        Camera_label.grid(row=1, column=0, padx=10)
+        # update_photo_btn = Button(
+        #     btn_frame1,
+        #     text="update photo sample .",
+        #     font=("times new roman", 13, "bold"),
+        #     bg="blue",
+        #     fg="white",
+        #     width="17",
+        # )
+        # update_photo_btn.grid(row=0, column=1)
 
     def add_data(self):
         if (
