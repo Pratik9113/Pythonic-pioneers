@@ -1,0 +1,15 @@
+database - use face_recognition
+
+student details 
+CREATE TABLE studentdetails (
+	studentid INT PRIMARY KEY,
+    dep VARCHAR(255),
+    course VARCHAR(255),
+    year INT,
+    semester VARCHAR(255),
+    studentname VARCHAR(255),
+    studentdiv VARCHAR(10),
+    studentgender VARCHAR(10),
+    dob DATE,
+    email VARCHAR(255)
+);

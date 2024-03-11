@@ -1,37 +1,33 @@
 from tkinter import *
 from tkinter import ttk, messagebox
-import pymysql
+import mysql.connector as mysql
 import os
+import sys
+sys.path.append(r'C:\Users\91799\Desktop\Pythonic-pioneers') 
 from signup_page import SignUp
 import credentials as cr
+# from path.to.studentDashboard import Face_Recognition_System
+from studentDashboard import Face_Recognition_System
 
 class login_page:
     def __init__(self, root):
         self.window = root
         self.window.title("Log ")
-        # Set the window size
-        # Here 0,0 represents the starting point of the window 
-        self.window.geometry("1280x800+0+0")
+        self.window.geometry("1080x720+200+45")
         self.window.config(bg = "white")
 
-        #============================================================================
-        #==============================DESIGN PART===================================
-        #============================================================================
-
-        self.frame1 = Frame(self.window, bg="yellow")
+        self.frame1 = Frame(self.window, bg="grey6")
         self.frame1.place(x=0, y=0, width=450, relheight = 1)
 
-        label1 = Label(self.frame1, text= "Py", font=("times new roman", 40, "bold"), bg="yellow", fg="red").place(x=100,y=300)
-        label2 = Label(self.frame1, text= "Seek", font=("times new roman", 40, "bold"), bg="yellow", fg="RoyalBlue1").place(x=162,y=300)
-        label3 = Label(self.frame1, text= "It's all about Python", font=("times new roman", 13, "bold"), bg="yellow", fg="brown4").place(x=100,y=360)
+        label1 = Label(self.frame1, text= "Face", font=("times new roman", 30, "bold"), bg="grey6", fg="white").place(x=70,y=300)
+        label2 = Label(self.frame1, text= "Recognition", font=("times new roman", 30, "bold"), bg="grey6", fg="white").place(x=162,y=300)
+        label3 = Label(self.frame1, text= "System for regular updates" ,font=("times new roman", 13, "bold"), bg="grey6", fg="white").place(x=100,y=360)
 
-        #=============Entry Field & Buttons============
-
-        self.frame2 = Frame(self.window, bg = "gray95")
+        self.frame2 = Frame(self.window, bg = "gray11")
         self.frame2.place(x=450,y=0,relwidth=1, relheight=1)
 
         self.frame3 = Frame(self.frame2, bg="white")
-        self.frame3.place(x=140,y=150,width=500,height=450)
+        self.frame3.place(x=140,y=150,width=400,height=450)
 
         self.email_label = Label(self.frame3,text="Email Address", font=("helvetica",20,"bold"),bg="white", fg="gray").place(x=50,y=40)
         self.email_entry = Entry(self.frame3,font=("times new roman",15,"bold"),bg="white",fg="gray")
@@ -50,34 +46,33 @@ class login_page:
 
 
     def login_func(self):
-        if self.email_entry.get()=="" or self.password_entry.get()=="":
-            messagebox.showerror("Error!","All fields are required",parent=self.window)
+        if self.email_entry.get() == "" or self.password_entry.get() == "":
+            messagebox.showerror("Error!", "All fields are required", parent=self.window)
         else:
             try:
-                connection=pymysql.connect(host=cr.host, user=cr.user, password=cr.password, database=cr.database)
+                connection = mysql.connect(host=cr.host, user=cr.user, password=cr.password, database=cr.database)
                 cur = connection.cursor()
-                cur.execute("select * from student where Name=%s and Password=%s",(self.email_entry.get(),self.password_entry.get()))
-                row=cur.fetchone()
-                if row == None:
-                    messagebox.showerror("Error!","Invalid USERNAME & PASSWORD",parent=self.window)
+                cur.execute("select * from student_register where email=%s and password=%s",
+                            (self.email_entry.get(), self.password_entry.get()))
+                row = cur.fetchone()
+                if row is None:
+                    messagebox.showerror("Error!", "Invalid Email & Password", parent=self.window)
                 else:
-                    messagebox.showinfo("Success","Wellcome to the PySeek family",parent=self.window)
-                    # Clear all the entries
-                    self.reset_fields()
+                    # here we have to link student dashboard 
                     
-                    connection.close()
-
+                    self.student_dashboard()
+                    self.window.destroy()
             except Exception as e:
-                messagebox.showerror("Error!",f"Error due to {str(e)}",parent=self.window)
+                messagebox.showerror("Error!", f"Error due to {str(e)}", parent=self.window)
 
     def forgot_func(self):
         if self.email_entry.get()=="":
             messagebox.showerror("Error!", "Please enter your Email Id",parent=self.window)
         else:
             try:
-                connection = pymysql.connect(host=cr.host, user=cr.user, password=cr.password, database=cr.database)
+                connection = mysql.connect(host=cr.host, user=cr.user, password=cr.password, database=cr.database)
                 cur = connection.cursor()
-                cur.execute("select * from student where Name=%s", self.email_entry.get())
+                cur.execute("select * from student_register where name=%s", self.email_entry.get())
                 row=cur.fetchone()
                 if row == None:
                     messagebox.showerror("Error!", "Email Id doesn't exists")
@@ -129,9 +124,9 @@ class login_page:
             messagebox.showerror("Error!", "Please fill the all entry field correctly")
         else:
             try:
-                connection = pymysql.connect(host=cr.host, user=cr.user, password=cr.password, database=cr.database)
+                connection = mysql.connect(host=cr.host, user=cr.user, password=cr.password, database=cr.database)
                 cur = connection.cursor()
-                cur.execute("select * from student where name=%s and question=%s and answer=%s", (self.email_entry.get(),self.sec_ques.get(),self.ans.get()))
+                cur.execute("select * from student_register where name=%s and question=%s and answer=%s", (self.email_entry.get(),self.sec_ques.get(),self.ans.get()))
                 row=cur.fetchone()
 
                 if row == None:
@@ -164,6 +159,14 @@ class login_page:
     def reset_fields(self):
         self.email_entry.delete(0,END)
         self.password_entry.delete(0,END)
+        
+    def student_dashboard(self):
+        self.window.withdraw()  # Hide the login window
+        student_dashboard_window = Toplevel(self.window)
+        obj = Face_Recognition_System(student_dashboard_window)
+        student_dashboard_window.mainloop()
+        
+        
 # The main function
 if __name__ == "__main__":
     root = Tk()
