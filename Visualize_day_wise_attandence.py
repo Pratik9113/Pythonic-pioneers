@@ -76,7 +76,7 @@ class AttendanceVisualization:
 
         # Check if the name is entered
         if not student_name:
-            return
+            return 
 
         # Clear previous plot if it exists
         for widget in self.root.winfo_children():
@@ -123,7 +123,7 @@ class AttendanceVisualization:
 
 # Assuming your dataset is already loaded into data_set variable
 try:
-    data_set = pd.read_csv("C:\\Users\\91799\\Desktop\\Pythonic-pioneers\\Attendance_output.csv")
+    data_set = pd.read_csv("./Attendance_output.csv")
 except Exception as e:
     print(f"Error loading dataset: {e}")
     data_set = pd.DataFrame()  # Initialize an empty DataFrame to avoid further issues

@@ -3,7 +3,6 @@ from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import messagebox
 import mysql.connector as mysql
-
 import credentials as cr
 class SignUp:
     def __init__(self, root):
@@ -72,18 +71,9 @@ class SignUp:
             except mysql.Error as es:
                 messagebox.showerror("Error!", f"MySQL Error: {es}", parent=self.window)
                 
-    # def redirect_window(self):
-    #     self.window.destroy()
-    #     # Importing the signup window.
-    #     # The page must be in the same directory
-    #     root = Tk()
-    #     obj = login_page(root)
-    #     root.mainloop()
     def redirect_window(self):
-    # Withdraw the current window (SignUp)
         self.window.withdraw()
         from LoginPage import login_page
-        # Create a new Toplevel window for the login page
         root = Toplevel()
         obj = login_page(root)
         root.mainloop()

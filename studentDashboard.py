@@ -7,7 +7,6 @@ from train import Train
 from face import FaceRecognitionApp
 # from face_recognition import Face_Recognition
 from Visualize_day_wise_attandence import AttendanceVisualization
-
 class Face_Recognition_System:
     def __init__(self, root):
         self.root = root
@@ -22,7 +21,7 @@ class Face_Recognition_System:
         # f_lbl.place(width ,height)
 
         # background page
-        imgbg1 = Image.open(r"C:\Users\91799\Desktop\Pythonic-pioneers\bg.png")
+        imgbg1 = Image.open(r"./bg.png")
         imgbg1 = imgbg1.resize(
             (1080, 720), Image.BILINEAR
         )  # Change to your desired filter
