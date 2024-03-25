@@ -5,21 +5,19 @@ import mysql.connector
 class AdminView:
     def __init__(self, root):
         self.root = root
-        self.root.geometry("1020x720+200+45")
+        self.root.geometry("1080x720+200+45")
         self.root.title("student")
 
-        # Background image
-        img_path = r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png"
+        img_path = r"./bg.png"
         img3 = Image.open(img_path)
         img3 = img3.resize(
             (1080, 710), resample=Image.LANCZOS
-        )  # Use LANCZOS for antialiasing
+        )
         self.photoimg3 = ImageTk.PhotoImage(img3)
 
         bg_img = Label(self.root, image=self.photoimg3)
         bg_img.place(x=0, y=0, width=1080, height=720)
 
-        # Frames
         main_frame = Frame(bg_img, bd=2)
         main_frame.place(x=0, y=0, width=1080, height=720)
 
@@ -33,7 +31,7 @@ class AdminView:
         )
         Right_frame.place(x=0, y=0, width=1000, height=700)
 
-        img_path = r"C:\Users\91799\Desktop\pythonprojectmainpratik\bg.png"
+        img_path = r"./bg.png"
         img_right = Image.open(img_path)
         img_right = img_right.resize(
             (1530, 710), resample=Image.LANCZOS
@@ -82,15 +80,16 @@ class AdminView:
         )
         search_combo.current(0)
         search_combo.grid(row=0, column=1, padx=2, pady=10, sticky=W)
-
+        self.search_var = StringVar()
         search_entry = ttk.Entry(
-            search_frame, width=15, font=("times new roman", 12, "bold")
+            search_frame, width=15, font=("times new roman", 12, "bold"),textvariable=self.search_var
         )
         search_entry.grid(row=0, column=2, padx=10, sticky=W)
         # button
         search_btn = Button(
             search_frame,
             text="Search",
+            command=self.search_data,
             font=("times new roman", 12, "bold"),
             bg="blue",
             fg="white",
@@ -98,15 +97,15 @@ class AdminView:
         )
         search_btn.grid(row=0, column=3)
 
-        showall_btn = Button(
-            search_frame,
-            text="Show All",
-            font=("times new roman", 12, "bold"),
-            bg="blue",
-            fg="white",
-            width="10",
-        )
-        showall_btn.grid(row=0, column=4)
+        # showall_btn = Button(
+        #     search_frame,
+        #     text="Show All",
+        #     font=("times new roman", 12, "bold"),
+        #     bg="blue",
+        #     fg="white",
+        #     width="10",
+        # )
+        # showall_btn.grid(row=0, column=4)
 
         # table
         table_frame = Frame(
@@ -116,14 +115,15 @@ class AdminView:
             relief=RIDGE,
             # font=("times new roman", 12, "bold"),
         )
-        table_frame.place(x=5, y=210, width=710, height=350)
+        table_frame.place(x=5, y=210, width=950, height=450)
 
         scroll_x = ttk.Scrollbar(table_frame, orient=HORIZONTAL)
         scroll_y = ttk.Scrollbar(table_frame, orient=VERTICAL)
 
+
         self.student_table = ttk.Treeview(
             table_frame,
-            column=("dep", "course", "year", "rollno", "gender"),
+            column=("studentid", "dep", "course", "year", "semester", "studentname","studentdiv","studentgender","dob","email" ),
             xscrollcommand=scroll_x.set,
             yscrollcommand=scroll_y.set,
         )
@@ -133,18 +133,29 @@ class AdminView:
         scroll_x.config(command=self.student_table.xview)
         scroll_y.config(command=self.student_table.yview)
 
+        self.student_table.heading("studentid", text="RollNo")
         self.student_table.heading("dep", text="Department")
         self.student_table.heading("course", text="Course")
         self.student_table.heading("year", text="Year")
-        self.student_table.heading("rollno", text="Roll NO")
-        self.student_table.heading("gender", text="Gender")
+        self.student_table.heading("semester", text="Semester")
+        self.student_table.heading("studentname", text="Name")
+        self.student_table.heading("studentdiv", text="Division")
+        self.student_table.heading("studentgender", text="Gender")
+        self.student_table.heading("dob", text="DOB")
+        self.student_table.heading("email", text="Email")
         self.student_table["show"] = "headings"
 
+        self.student_table.column("studentid", width=100)
         self.student_table.column("dep", width=100)
         self.student_table.column("course", width=100)
         self.student_table.column("year", width=100)
-        self.student_table.column("rollno", width=100)
-        self.student_table.column("gender", width=100)
+        self.student_table.column("semester", width=100)
+        self.student_table.column("studentname", width=100)
+        self.student_table.column("studentdiv", width=100)
+        self.student_table.column("studentgender", width=100)
+        self.student_table.column("dob", width=100)
+        self.student_table.column("email", width=100)
+
 
         self.student_table.pack(fill=BOTH, expand=1)
         self.fetch_data()
@@ -167,13 +178,30 @@ class AdminView:
                 self.student_table.insert("", END, values=i)
             conn.commit()
         conn.close()
+        
+    def search_data(self):
+        search_query = self.search_var.get()
+        if search_query:
+            conn = mysql.connector.connect(
+                host="localhost",
+                username="root",
+                password="Pratik@6878",
+                database="face_recognition",
+            )
+            my_cursor = conn.cursor()
+            query = "SELECT * FROM studentdetails WHERE studentid LIKE %s OR dep LIKE %s OR course LIKE %s OR year LIKE %s OR semester LIKE %s OR studentname LIKE %s OR studentdiv LIKE %s OR studentgender LIKE %s OR dob LIKE %s OR email LIKE %s"
+            my_cursor.execute(query, ('%' + search_query + '%',) * 10)
+            data = my_cursor.fetchall()
 
-    ###########3 get cursor
-    # def get_cursor(self, event=""):
-    #     cursor_focus = self.student_table.focus()
-    #     content = self.student_table, item(cursor_focus)
-    #     data = content["values"]
-    #     self.var_
+            if len(data) != 0:
+                self.student_table.delete(*self.student_table.get_children())
+                for i in data:
+                    self.student_table.insert("", END, values=i)
+                conn.commit()
+            conn.close()
+        else:
+            # If search query is empty, fetch all data
+            self.fetch_data()
 
 
 if __name__ == "__main__":

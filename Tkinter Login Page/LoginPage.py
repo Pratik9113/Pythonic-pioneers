@@ -6,7 +6,6 @@ import sys
 sys.path.append(r'C:\Users\91799\Desktop\Pythonic-pioneers') 
 from signup_page import SignUp
 import credentials as cr
-# from path.to.studentDashboard import Face_Recognition_System
 from studentDashboard import Face_Recognition_System
 
 class login_page:
@@ -37,7 +36,6 @@ class login_page:
         self.password_entry = Entry(self.frame3,font=("times new roman",15,"bold"),bg="white",fg="gray",show="*")
         self.password_entry.place(x=50, y=160, width=300)
 
-        #================Buttons===================
         self.login_button = Button(self.frame3,text="Log In",command=self.login_func,font=("times new roman",15, "bold"),bd=0,cursor="hand2",bg="blue",fg="white").place(x=50,y=200,width=300)
 
         self.forgotten_pass = Button(self.frame3,text="Forgotten password?",command=self.forgot_func,font=("times new roman",10, "bold"),bd=0,cursor="hand2",bg="white",fg="blue").place(x=125,y=260,width=150)
@@ -58,7 +56,6 @@ class login_page:
                 if row is None:
                     messagebox.showerror("Error!", "Invalid Email & Password", parent=self.window)
                 else:
-                    # here we have to link student dashboard 
                     
                     self.student_dashboard()
                     self.window.destroy()
@@ -79,10 +76,6 @@ class login_page:
                 else:
                     connection.close()
                     
-                    #=========================SECOND WINDOW===============================
-                    #------------Toplevel:create a window top of another window-----------
-                    #------------focus_force:Helps to to focus on the current window------
-                    #-----Grab:Helps to grab the current window until user ungrab it------
 
                     self.root=Toplevel()
                     self.root.title("Forget Password?")
@@ -150,8 +143,6 @@ class login_page:
 
     def redirect_window(self):
         self.window.destroy()
-        # Importing the signup window.
-        # The page must be in the same directory
         root = Tk()
         obj = SignUp(root)
         root.mainloop()
@@ -161,7 +152,7 @@ class login_page:
         self.password_entry.delete(0,END)
         
     def student_dashboard(self):
-        self.window.withdraw()  # Hide the login window
+        self.window.withdraw()
         student_dashboard_window = Toplevel(self.window)
         obj = Face_Recognition_System(student_dashboard_window)
         student_dashboard_window.mainloop()
