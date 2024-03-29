@@ -71,68 +71,62 @@ class FaceRecognitionApp:
             if name not in nameList:
                 now = datetime.now()
                 dtString = now.strftime("%Y-%m-%d,%H:%M:%S")
-                day = date.today().day
+                day = datetime.today().strftime("%A")
                 subject = ""
                 current_time = datetime.now().time()
-                # In this section, we deal with subject-wise attendance for Wednesday
-                # Assuming the lectures start at the specified times
                 if (day == "Monday") : 
-                    if current_time >= datetime.strptime("10:44:00", "%H:%M:%S").time() and current_time < datetime.strptime("10:45:50", "%H:%M:%S").time():
+                    if current_time >= datetime.strptime("08:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("09:30:00", "%H:%M:%S").time():
                         subject = "CN"
-                    elif current_time >= datetime.strptime("00:04:00", "%H:%M:%S").time() and current_time < datetime.strptime("00:05:30", "%H:%M:%S").time():
+                    elif current_time >= datetime.strptime("09:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("10:30:00", "%H:%M:%S").time():
                         subject = "AM-IV"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
+                    elif current_time >= datetime.strptime("10:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:30:00", "%H:%M:%S").time():
                         subject = "OS"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
+                    elif current_time >= datetime.strptime("11:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("12:30:00", "%H:%M:%S").time():
                         subject = "COA"
-                    elif current_time >= datetime.strptime("12:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("14:00:00", "%H:%M:%S").time():
+                    elif current_time >= datetime.strptime("13:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("14:30:00", "%H:%M:%S").time():
                         subject = "LabOS"
                 
                 elif (day == "Tuesday") : 
-                    if current_time >= datetime.strptime("10:44:00", "%H:%M:%S").time() and current_time < datetime.strptime("10:45:50", "%H:%M:%S").time():
+                    if current_time >= datetime.strptime("08:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("09:30:00", "%H:%M:%S").time():
                         subject = "CN"
-                    elif current_time >= datetime.strptime("00:04:00", "%H:%M:%S").time() and current_time < datetime.strptime("00:05:30", "%H:%M:%S").time():
+                    elif current_time >= datetime.strptime("09:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("10:30:00", "%H:%M:%S").time():
                         subject = "AM-IV"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
-                        subject = "OS"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
+                    elif current_time >= datetime.strptime("10:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:30:00", "%H:%M:%S").time():
                         subject = "COA"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
+                    elif current_time >= datetime.strptime("11:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("12:30:00", "%H:%M:%S").time():
+                        subject = "PHY"
+                    elif current_time >= datetime.strptime("13:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("15:30:00", "%H:%M:%S").time():
                         subject = "LabOS"
                 elif (day == "Wednesday") : 
-                    if current_time >= datetime.strptime("10:44:00", "%H:%M:%S").time() and current_time < datetime.strptime("10:45:50", "%H:%M:%S").time():
+                    if current_time >= datetime.strptime("08:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("09:30:00", "%H:%M:%S").time():
                         subject = "CN"
-                    elif current_time >= datetime.strptime("00:04:00", "%H:%M:%S").time() and current_time < datetime.strptime("00:05:30", "%H:%M:%S").time():
+                    elif current_time >= datetime.strptime("09:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("10:30:00", "%H:%M:%S").time():
                         subject = "AM-IV"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
+                    elif current_time >= datetime.strptime("10:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:30:00", "%H:%M:%S").time():
                         subject = "OS"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
+                    elif current_time >= datetime.strptime("11:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("12:30:00", "%H:%M:%S").time():
                         subject = "COA"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
-                        subject = "LabOS"
+                    elif current_time >= datetime.strptime("13:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("15:30:00", "%H:%M:%S").time():
+                        subject = "LabPHY"
                 elif (day == "Thursday") : 
-                    if current_time >= datetime.strptime("10:44:00", "%H:%M:%S").time() and current_time < datetime.strptime("10:45:50", "%H:%M:%S").time():
-                        subject = "CN"
-                    elif current_time >= datetime.strptime("00:04:00", "%H:%M:%S").time() and current_time < datetime.strptime("00:05:30", "%H:%M:%S").time():
-                        subject = "AM-IV"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
+                    if current_time >= datetime.strptime("08:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("09:30:00", "%H:%M:%S").time():
                         subject = "OS"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
+                    elif current_time >= datetime.strptime("09:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("10:30:00", "%H:%M:%S").time():
+                        subject = "PHY"
+                    elif current_time >= datetime.strptime("10:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:30:00", "%H:%M:%S").time():
                         subject = "COA"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
-                        subject = "LabOS"
+                    elif current_time >= datetime.strptime("11:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("12:30:00", "%H:%M:%S").time():
+                        subject = "AT"
+                    elif current_time >= datetime.strptime("13:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("15:30:00", "%H:%M:%S").time():
+                        subject = "LabCN"
                         
                 elif (day == "Friday") : 
-                    if current_time >= datetime.strptime("10:44:00", "%H:%M:%S").time() and current_time < datetime.strptime("10:45:50", "%H:%M:%S").time():
-                        subject = "CN"
-                    elif current_time >= datetime.strptime("00:04:00", "%H:%M:%S").time() and current_time < datetime.strptime("00:05:30", "%H:%M:%S").time():
-                        subject = "AM-IV"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
+                    if current_time >= datetime.strptime("08:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("09:30:00", "%H:%M:%S").time():
                         subject = "OS"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
-                        subject = "COA"
-                    elif current_time >= datetime.strptime("10:00:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:00:00", "%H:%M:%S").time():
-                        subject = "LabOS"
+                    elif current_time >= datetime.strptime("09:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("10:30:00", "%H:%M:%S").time():
+                        subject = "AM-IV"
+                    elif current_time >= datetime.strptime("10:30:00", "%H:%M:%S").time() and current_time < datetime.strptime("11:30:00", "%H:%M:%S").time():
+                        subject = "AT"
                         
                 else : 
                     if current_time >= datetime.strptime("10:44:00", "%H:%M:%S").time() and current_time < datetime.strptime("10:45:50", "%H:%M:%S").time():

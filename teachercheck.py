@@ -29,7 +29,7 @@ class AdminView:
             text="Students Details",
             font=("times new roman", 12, "bold"),
         )
-        Right_frame.place(x=0, y=0, width=1000, height=700)
+        Right_frame.place(x=0, y=0, width=1080, height=700)
 
         img_path = r"./bg.png"
         img_right = Image.open(img_path)
@@ -39,7 +39,7 @@ class AdminView:
         self.photoimg_right = ImageTk.PhotoImage(img_right)
 
         bg_img_right = Label(Right_frame, image=self.photoimg_right)
-        bg_img_right.place(x=5, y=5, width=980, height=130)
+        bg_img_right.place(x=5, y=5, width=1060, height=130)
 
         #   search system
 
@@ -51,7 +51,7 @@ class AdminView:
             text="Search system ",
             font=("times new roman", 12, "bold"),
         )
-        search_frame.place(x=5, y=135, width=950, height=70)
+        search_frame.place(x=5, y=135, width=1060, height=70)
 
         search_label = Label(
             search_frame,
@@ -115,7 +115,7 @@ class AdminView:
             relief=RIDGE,
             # font=("times new roman", 12, "bold"),
         )
-        table_frame.place(x=5, y=210, width=950, height=450)
+        table_frame.place(x=5, y=210, width=1060, height=450)
 
         scroll_x = ttk.Scrollbar(table_frame, orient=HORIZONTAL)
         scroll_y = ttk.Scrollbar(table_frame, orient=VERTICAL)
@@ -159,7 +159,6 @@ class AdminView:
 
         self.student_table.pack(fill=BOTH, expand=1)
         self.fetch_data()
-        # get cursor no use self.student_table.bind("<ButtonRelease>", self.get_cursor)
 
     def fetch_data(self):
         conn = mysql.connector.connect(
@@ -200,9 +199,7 @@ class AdminView:
                 conn.commit()
             conn.close()
         else:
-            # If search query is empty, fetch all data
             self.fetch_data()
-
 
 if __name__ == "__main__":
     root = Tk()

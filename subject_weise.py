@@ -60,9 +60,6 @@ class AttendanceVisualization:
         try:
             # Filter data for the specified student
             student_data = data_set[data_set['Name'] == student_name]
-
-            # Group data by date and count the number of lectures attended
-            #Sub_attendance = student_data.groupby('Date').size().reset_index(name='Lectures_Attended')
             Sub_attendance = student_data.groupby('Subject').size().reset_index(name='Lectures_Attended')
             total_lectures = 120
             lectures_attended = Sub_attendance['Lectures_Attended'].sum()
